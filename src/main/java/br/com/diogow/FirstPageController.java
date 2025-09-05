@@ -22,12 +22,14 @@ public class FirstPageController {
     }
 
     @PostMapping("/create")
-    public String registerCandidate(Person person){
+    public String registerCandidate(Model model,Person person){
         System.out.println("Nome: " +  person.name);
         System.out.println("Usuário: " + person.username);
         System.out.println("Email: " + person.email);
 
-        return "redirect:/login";
+        model.addAttribute("person", person);
+
+        return "candidate/info";
     }
 
     record Person(String username, String email, String name){}

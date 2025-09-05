@@ -12,7 +12,6 @@ public class FirstPageController {
 
     @GetMapping("/home")
     public String firstPageHtml(Model model) {
-
         model.addAttribute("mensagemController", "Primeira mensagem vindo da controller");
         return "firstPage";
     }
@@ -23,8 +22,13 @@ public class FirstPageController {
     }
 
     @PostMapping("/create")
-    public String registerCandidate(String candidate_name){
-        System.out.println("nome do candidato: " + candidate_name);
-        return "/candidate/login";
+    public String registerCandidate(Person person){
+        System.out.println("Nome: " +  person.name);
+        System.out.println("Usuário: " + person.username);
+        System.out.println("Email: " + person.email);
+
+        return "redirect:/login";
     }
+
+    record Person(String username, String email, String name){}
 }

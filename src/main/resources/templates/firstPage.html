@@ -6,5 +6,11 @@
 
     <body>
         <p th:text="${mensagemController}"></p>
+
+        <form method="post" th:action="@{/create}">
+            nome do candidato: <input type="text" name="candidate_name">
+            <br />
+            <button>cadastrar candidato</button>
+        </form>
     </body>
 </html>

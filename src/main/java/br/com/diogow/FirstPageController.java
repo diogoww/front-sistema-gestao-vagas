@@ -1,6 +1,7 @@
 package br.com.diogow;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class FirstPageController {
 
     @GetMapping("/home")
-    public String firstPageHtml() {
+    public String firstPageHtml(Model model) {
+
+        model.addAttribute("mensagemController", "Primeira mensagem vindo da controller");
         return "firstPage";
     }
 

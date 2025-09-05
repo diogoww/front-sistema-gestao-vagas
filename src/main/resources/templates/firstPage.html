@@ -1,11 +1,10 @@
 <!doctype html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>HTML + Thymeleaf</title>
-</head>
-<body>
-    <p>aloooooo</p>
-</body>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HTML + Thymeleaf</title>
+    </head>
+
+    <body>
+        <p th:text="${mensagemController}"></p>
+    </body>
 </html>

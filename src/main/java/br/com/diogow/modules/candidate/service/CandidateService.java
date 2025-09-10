@@ -14,7 +14,7 @@ import java.util.Map;
 public class CandidateService {
 
     public Token login(String username, String password){
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate rt = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -25,7 +25,7 @@ public class CandidateService {
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(data, headers);
 
-        var result = restTemplate.postForObject("http://localhost:8080/candidate/auth", request, Token.class);
+        var result = rt.postForObject("http://localhost:8080/candidate/auth", request, Token.class);
 
         System.out.println(result);
 

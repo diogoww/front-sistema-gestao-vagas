@@ -1,11 +1,13 @@
 package br.com.diogow.modules.candidate.controller;
 
 import br.com.diogow.modules.candidate.service.CandidateService;
+import br.com.diogow.modules.candidate.service.ProfileCandidateService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +26,9 @@ import java.util.Set;
 public class CandidateController {
 
     @Autowired
+    private ProfileCandidateService profileCandidateService;
+
+    @Autowired
     private CandidateService candidateService;
 
     @GetMapping("/login")
@@ -36,10 +41,11 @@ public class CandidateController {
 
         try{
             var token = this.candidateService.login(username, password);
-            var grants = token.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
+            var grants = token.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
 
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(null, null, grants);
-            auth.setDetails(token);
+            auth.setDetails(token.getAccess_token());
 
             SecurityContextHolder.getContext().setAuthentication(auth);
             SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -48,15 +54,19 @@ public class CandidateController {
 
             return "redirect:/candidate/profile";
 
-        } catch (HttpClientErrorException e){
-            redirectAttributes.addFlashAttribute("error_message", "Usuário e/ou senha incorretos");
+        } catch (HttpClientErrorException e) {
+            redirectAttributes.addFlashAttribute("error_message", "Usuário/Senha incorretos");
             return "redirect:/candidate/login";
         }
     }
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('CANDIDATE')")
-    public String profile(){
+    public String profile() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var result = this.profileCandidateService.execute(authentication.getDetails().toString());
+
         return "candidate/profile";
     }
 }

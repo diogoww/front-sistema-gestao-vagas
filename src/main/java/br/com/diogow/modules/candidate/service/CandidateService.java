@@ -27,6 +27,8 @@ public class CandidateService {
 
         var result = restTemplate.postForObject("http://localhost:8080/candidate/auth", request, Token.class);
 
+        System.out.println(result);
+
         return result;
     }
 }

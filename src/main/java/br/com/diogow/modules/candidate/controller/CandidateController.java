@@ -1,12 +1,12 @@
 package br.com.diogow.modules.candidate.controller;
 
+import br.com.diogow.modules.candidate.dto.Token;
 import br.com.diogow.modules.candidate.service.CandidateService;
 import br.com.diogow.modules.candidate.service.ProfileCandidateService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -19,57 +19,72 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Controller
 @RequestMapping("/candidate")
 public class CandidateController {
 
-    @Autowired
-    private ProfileCandidateService profileCandidateService;
+	@Autowired
+	private ProfileCandidateService profileCandidateService;
 
-    @Autowired
-    private CandidateService candidateService;
+	@Autowired
+	private CandidateService candidateService;
 
-    @GetMapping("/login")
-    public String login(){
-        return "candidate/login";
-    }
+	@GetMapping("/login")
+	public String login(){
+		return "candidate/login";
+	}
 
-    @PostMapping("/signIn")
-    public String signIn(RedirectAttributes redirectAttributes, HttpSession session, String username, String password){
+	@PostMapping("/signIn")
+	public String signIn(RedirectAttributes redirectAttributes, HttpSession session, String username, String password){
 
-        try{
-            var token = this.candidateService.login(username, password);
-            var grants = token.getRoles().stream()
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
+		try{
+			var token = this.candidateService.login(username, password);
 
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(null, null, grants);
-            auth.setDetails(token.getAccess_token());
+			var roles = token.getRoles();
+			if (roles == null || roles.isEmpty()) {
+				roles = List.of("CANDIDATE");
+				token.setRoles(roles);
+			}
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-            session.setAttribute("token", token);
+			var grants = roles.stream()
+					.map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
 
-            return "redirect:/candidate/profile";
+			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(null, null, grants);
+			auth.setDetails(token.getAccess_token());
 
-        } catch (HttpClientErrorException e) {
-            redirectAttributes.addFlashAttribute("error_message", "Usuário/Senha incorretos");
-            return "redirect:/candidate/login";
-        }
-    }
+			SecurityContextHolder.getContext().setAuthentication(auth);
+			SecurityContext securityContext = SecurityContextHolder.getContext();
+			session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+			session.setAttribute("token", token);
 
-    @GetMapping("/profile")
-    @PreAuthorize("hasRole('CANDIDATE')")
-    public String profile(Model model) {
+			return "redirect:/candidate/profile";
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        var user = this.profileCandidateService.execute(authentication.getDetails().toString());
+		} catch (HttpClientErrorException e) {
+			redirectAttributes.addFlashAttribute("error_message", "Usuário/Senha incorretos");
+			return "redirect:/candidate/login";
+		}
+	}
 
-        model.addAttribute("user", user);
+	@GetMapping("/profile")
+	@PreAuthorize("hasRole('CANDIDATE')")
+	public String profile(Model model, HttpSession session) {
 
-        return "candidate/profile";
-    }
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			return "redirect:/candidate/login";
+		}
+
+		Token token = (Token) session.getAttribute("token");
+		if (token == null || token.getAccess_token() == null) {
+			return "redirect:/candidate/login";
+		}
+
+		var user = this.profileCandidateService.execute(token.getAccess_token());
+
+		model.addAttribute("user", user);
+
+		return "candidate/profile";
+	}
 }

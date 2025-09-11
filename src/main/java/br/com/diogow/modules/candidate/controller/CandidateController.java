@@ -2,6 +2,7 @@ package br.com.diogow.modules.candidate.controller;
 
 import br.com.diogow.modules.candidate.dto.Token;
 import br.com.diogow.modules.candidate.service.CandidateService;
+import br.com.diogow.modules.candidate.service.FindJobsService;
 import br.com.diogow.modules.candidate.service.ProfileCandidateService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class CandidateController {
 
 	@Autowired
 	private CandidateService candidateService;
+
+	@Autowired
+	private FindJobsService findJobsService;
 
 	@GetMapping("/login")
 	public String login(){
@@ -90,8 +94,23 @@ public class CandidateController {
 
 	@GetMapping("/jobs")
 	@PreAuthorize("hasRole('CANDIDATE')")
-	public String jobs(){
+	public String jobs(Model model, String filter){
+		System.out.println("vaga: " + filter);
+
+		try {
+			if (filter != null){
+				this.findJobsService.execute(getToken(), filter);
+			}
+		} catch (HttpClientErrorException e){
+			return "redirect:/candidate/login";
+		}
+
 		return "candidate/jobs";
+	}
+
+	private String getToken() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication.getDetails().toString();
 	}
 
 }

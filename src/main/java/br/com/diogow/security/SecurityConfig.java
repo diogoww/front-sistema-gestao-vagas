@@ -10,14 +10,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests(auth -> {
-            auth.requestMatchers("/candidate/login").permitAll()
-                    .requestMatchers("/candidate/signIn").permitAll();
-            auth.anyRequest().authenticated();
-        })
-                .formLogin(form -> form.loginPage("/candidate/login"));
-        return http.build();
-    }
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+			.csrf(csrf -> csrf.disable())
+			.authorizeHttpRequests(auth -> auth
+					.requestMatchers("/candidate/login", "/candidate/signIn").permitAll()
+					.anyRequest().authenticated()
+			)
+			.formLogin(form -> form
+					.loginPage("/candidate/login")
+					.permitAll()
+			);
+		return http.build();
+	}
 }

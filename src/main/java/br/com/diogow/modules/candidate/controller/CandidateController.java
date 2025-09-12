@@ -1,5 +1,6 @@
 package br.com.diogow.modules.candidate.controller;
 
+import br.com.diogow.modules.candidate.dto.CreateCandidateDTO;
 import br.com.diogow.modules.candidate.dto.Token;
 import br.com.diogow.modules.candidate.service.ApplyJobService;
 import br.com.diogow.modules.candidate.service.CandidateService;
@@ -44,11 +45,6 @@ public class CandidateController {
 	@GetMapping("/login")
 	public String login(){
 		return "candidate/login";
-	}
-
-	@GetMapping("/create")
-	public String create(){
-		return "candidate/create";
 	}
 
 	@PostMapping("/signIn")
@@ -124,6 +120,18 @@ public class CandidateController {
 	public String applyJob(@RequestParam("jobId")UUID jobId){
 		this.applyJobService.execute(getToken(), jobId);
 		return "redirect:/candidate/jobs";
+	}
+
+	@GetMapping("/create")
+	public String create(Model model){
+		model.addAttribute("candidate", new CreateCandidateDTO());
+		return "candidate/create";
+	}
+
+	@PostMapping("/create")
+	public String save(CreateCandidateDTO candidate, Model model){
+		model.addAttribute("candidate", candidate);
+		return "candidate/login";
 	}
 
 	private String getToken() {

@@ -28,10 +28,16 @@
                 <button class="bg-purple-700 hover:bg-purple-600 text-white w-24 p-2 ml-2 rounded">Buscar</button>
             </form>
 
-            <div th:each="job: ${jobs}" class="text-white">
-                <h2 th:text="${job.description}"></h2>
-                <span th:text="${job.level}"></span>
+            <div class="max-w-md mx-auto mt-10">
+                <div th:each="job: ${jobs}" class="text-white bg-gray-800 rounded-lg p-4 mb-4 shadow-md">
+                    <h2 th:text="${job.description}" class="font-bold"></h2>
+                    <span th:text="${job.level}" class="block"></span>
+                    <span class="block mt-4 font-bold">Benefícios</span>
+                    <span th:text="${job.benefits}" class="block mb-4"></span>
+                    <button class="bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded">Aplicar</button>
+                </div>
             </div>
         </div>
+
     </body>
 </html>

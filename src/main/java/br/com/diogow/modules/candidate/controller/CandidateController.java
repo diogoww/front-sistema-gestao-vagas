@@ -1,6 +1,7 @@
 package br.com.diogow.modules.candidate.controller;
 
 import br.com.diogow.modules.candidate.dto.Token;
+import br.com.diogow.modules.candidate.service.ApplyJobService;
 import br.com.diogow.modules.candidate.service.CandidateService;
 import br.com.diogow.modules.candidate.service.FindJobsService;
 import br.com.diogow.modules.candidate.service.ProfileCandidateService;
@@ -17,10 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/candidate")
@@ -34,6 +37,9 @@ public class CandidateController {
 
 	@Autowired
 	private FindJobsService findJobsService;
+
+	@Autowired
+	private ApplyJobService applyJobService;
 
 	@GetMapping("/login")
 	public String login(){
@@ -95,7 +101,6 @@ public class CandidateController {
 	@GetMapping("/jobs")
 	@PreAuthorize("hasRole('CANDIDATE')")
 	public String jobs(Model model, String filter){
-		System.out.println("vaga: " + filter);
 
 		try {
 			if (filter != null){
@@ -107,6 +112,13 @@ public class CandidateController {
 		}
 
 		return "candidate/jobs";
+	}
+
+	@PostMapping("/jobs/apply")
+	@PreAuthorize("hasRole('CANDIDATE')")
+	public String applyJob(@RequestParam("jobId")UUID jobId){
+		this.applyJobService.execute(getToken(), jobId);
+		return "redirect:/candidate/jobs";
 	}
 
 	private String getToken() {

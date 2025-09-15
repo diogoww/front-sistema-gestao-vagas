@@ -19,6 +19,8 @@ public class SecurityConfig {
 					.requestMatchers("/candidate/signIn").permitAll()
 					.requestMatchers("/candidate/create").permitAll()
 					.requestMatchers("/company/create").permitAll()
+					.requestMatchers("/company/login").permitAll()
+					.requestMatchers("/company/signIn").permitAll()
 					.anyRequest().authenticated()
 			)
 			.formLogin(form -> form

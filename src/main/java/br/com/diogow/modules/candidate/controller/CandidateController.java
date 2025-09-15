@@ -3,6 +3,7 @@ package br.com.diogow.modules.candidate.controller;
 import br.com.diogow.modules.candidate.dto.CreateCandidateDTO;
 import br.com.diogow.modules.candidate.dto.Token;
 import br.com.diogow.modules.candidate.service.*;
+import br.com.diogow.utils.FormatErrorMessage;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -134,7 +135,7 @@ public class CandidateController {
 		try {
 			this.createCandidateService.execute(candidate);
 		} catch (HttpClientErrorException ex){
-			model.addAttribute("error_message", ex.getMessage());
+			model.addAttribute("error_message", FormatErrorMessage.formatErrorMessage(ex.getResponseBodyAsString()));
 		}
 
 		model.addAttribute("candidate", candidate);

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 
 @Controller
 @RequestMapping("/company")
@@ -56,16 +55,15 @@ public class CompanyController {
     }
 
     @PostMapping("/signIn")
-    public String signIn(RedirectAttributes redirectAttributes, HttpSession session, String username, String password){
+    public String signIn(RedirectAttributes redirectAttributes, HttpSession session, String username, String password) {
 
-        try{
+        try {
             var token = this.loginCompanyService.execute(username, password);
-            var grants = token.getRoles().stream()
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" +
-                            role.toString().toUpperCase()))
-                    .toList();
 
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(null, null, grants);
+            var grants = token.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
+
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, grants);
             auth.setDetails(token.getAccess_token());
 
             SecurityContextHolder.getContext().setAuthentication(auth);
@@ -77,7 +75,7 @@ public class CompanyController {
 
         } catch (HttpClientErrorException e) {
             redirectAttributes.addFlashAttribute("error_message", "Usuário/Senha incorretos");
-            return "redirect:/company/jobs";
+            return "redirect:/company/login";
         }
     }
 

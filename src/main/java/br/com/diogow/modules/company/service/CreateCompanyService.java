@@ -9,15 +9,16 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class CreateCompanyService {
+    public String execute(CreateCompanyDTO createCompanyDTO) {
 
-    public String execute(CreateCompanyDTO createCompanyDTO){
         RestTemplate rt = new RestTemplate();
 
-        org.springframework.http.HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<CreateCompanyDTO> request = new HttpEntity<>(createCompanyDTO, headers);
+        HttpEntity<CreateCompanyDTO> request = new HttpEntity<>(createCompanyDTO ,headers);
 
         return rt.postForObject("http://localhost:8080/company/", request, String.class);
+
     }
 }

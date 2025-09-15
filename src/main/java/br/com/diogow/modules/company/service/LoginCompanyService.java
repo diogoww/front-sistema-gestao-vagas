@@ -26,7 +26,9 @@ public class LoginCompanyService {
         HttpEntity<Map<String, String>> request = new HttpEntity<>(data, headers);
 
         var result = rt.postForObject("http://localhost:8080/company/auth", request, Token.class);
+
         System.out.println(result);
+
         return result;
     }
 }

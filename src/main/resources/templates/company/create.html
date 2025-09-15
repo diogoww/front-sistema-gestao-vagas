@@ -12,39 +12,42 @@
 
     <div class="space-y-8 bg-zinc-900 roundend-md p-20 justify-items-center">
 
-        <p class="text-white">Olá empresa, crie o seu cadastro gratuitamente!</p>
+        <p class="text-white">Olá, empresa! Crie o seu cadastro gratuitamente!</p>
 
-        <input type="text" name="name"
-               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
-               th:field="*{name}"
-               placeholder="Digite o nome da empresa">
+        <div class="flex flex-row gap-10">
+            <input type="text" name="name"
+                   class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                   th:field="*{name}"
+                   placeholder="Digite o nome da empresa">
+            <input type="text" name="username"
+                   class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                   th:field="*{username}"
+                   placeholder="Digite o seu usuário">
+        </div>
 
-        <input type="email" name="email"
-               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
-               th:field="*{email}"
-               placeholder="Digite o email da empresa">
+        <div class="flex flex-row gap-10">
+            <input type="email" name="email"
+                   class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                   th:field="*{email}"
+                   placeholder="Digite o email da empresa">
+            <input type="text" name="website"
+                   class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                   th:field="*{website}"
+                   placeholder="Digite o seu website">
+        </div>
 
-        <input type="text" name="username"
-               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
-               th:field="*{username}"
-               placeholder="Digite o seu usuário">
-
-        <input type="text" name="website"
-               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
-               th:field="*{website}"
-               placeholder="Digite o seu website">
-
-        <input type="password" name="password" id="password"
-               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
-               th:field="*{password}"
-               placeholder="Senha">
-
-        <input type="password" name="password" id="confirmPassword"
-               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
-               placeholder="Confirme sua senha">
+        <div class="flex flex-row gap-10">
+            <input type="password" name="password" id="password"
+                   class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                   th:field="*{password}"
+                   placeholder="Senha">
+            <input type="password" name="password" id="confirmPassword"
+                   class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                   placeholder="Confirme sua senha">
+        </div>
 
         <textarea name="description"
-                  class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                  class="bg-gray-100 text-gray-900 text-xd rounded w-full block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
                   th:field="*{description}"
                   placeholder="Digite uma breve descrição sobre sua empresa"></textarea>
 
@@ -52,9 +55,12 @@
 
         <p class="text-red-400 text-center" th:if="${error_message}" th:text="${error_message}"></p>
 
-        <button class="bg-purple-900 w-96 p-4 rounded text-white hover:bg-purple-700 block">Cadastra-se</button>
+        <button class="bg-purple-900 w-full p-4 rounded text-white hover:bg-purple-700 block">Cadastra-se</button>
 
-        <a href="/company/login" class="block text-center text-purple-700 underline underline-offset-2 hover:text-purple-600 block">Já possui uma empresa? Clique aqui.</a>
+        <p class="mt-4 text-white">
+            Já possui uma empresa? <a href="/company/login" class="text-center text-purple-700 underline underline-offset-2 hover:text-purple-600 no-underline">Clique aqui.</a>
+        </p>
+
     </div>
     <div class="text-white text-center max-w-80 text-6xl flex items-center">
         Gestão de Vagas

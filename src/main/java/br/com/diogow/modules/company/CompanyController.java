@@ -29,8 +29,9 @@ public class CompanyController {
         try{
             this.createCompanyService.execute(createCompanyDTO);
             model.addAttribute("company", new CreateCompanyDTO());
-        } catch (HttpClientErrorException e) {
-            model.addAttribute("error_message", FormatErrorMessage.formatErrorMessage(e.getResponseBodyAsString()));
+
+        } catch(HttpClientErrorException ex){
+            model.addAttribute("error_message", FormatErrorMessage.formatErrorMessage(ex.getResponseBodyAsString()));
             model.addAttribute("company", createCompanyDTO);
         }
         return "company/create";

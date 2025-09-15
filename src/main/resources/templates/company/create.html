@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Cadastro de Empresa</title>
+</head>
+
+<body class="bg-sky-950 h-screen items-center flex justify-center">
+<form id="submitForm" action="" class="flex gap-24" th:action="@{/company/create}" method="post" th:object="${company}">
+
+    <div class="space-y-8 bg-zinc-900 roundend-md p-20 justify-items-center">
+
+        <p class="text-white">Olá empresa, crie o seu cadastro gratuitamente!</p>
+
+        <input type="text" name="name"
+               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+               th:field="*{name}"
+               placeholder="Digite o nome da empresa">
+
+        <input type="email" name="email"
+               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+               th:field="*{email}"
+               placeholder="Digite o email da empresa">
+
+        <input type="text" name="username"
+               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+               th:field="*{username}"
+               placeholder="Digite o seu usuário">
+
+        <input type="text" name="website"
+               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+               th:field="*{website}"
+               placeholder="Digite o seu website">
+
+        <input type="password" name="password" id="password"
+               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+               th:field="*{password}"
+               placeholder="Senha">
+
+        <input type="password" name="password" id="confirmPassword"
+               class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+               placeholder="Confirme sua senha">
+
+        <textarea name="description"
+                  class="bg-gray-100 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring-purple-600 focus:ring-2"
+                  th:field="*{description}"
+                  placeholder="Digite uma breve descrição sobre sua empresa"></textarea>
+
+        <p class="text-red-400 hidden" id="password_error">As senhas não conferem!</p>
+
+        <p class="text-red-400 text-center" th:if="${error_message}" th:text="${error_message}"></p>
+
+        <button class="bg-purple-900 w-96 p-4 rounded text-white hover:bg-purple-700 block">Cadastra-se</button>
+
+        <a href="/company/login" class="block text-center text-purple-700 underline underline-offset-2 hover:text-purple-600 block">Já possui uma empresa? Clique aqui.</a>
+    </div>
+    <div class="text-white text-center max-w-80 text-6xl flex items-center">
+        Gestão de Vagas
+    </div>
+</form>
+</body>
+
+<script>
+    document.getElementById("submitForm").addEventListener("submit", (event) => {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password != confirmPassword) {
+            document.getElementById("password_error").classList.remove("hidden")
+            event.preventDefault();
+        }
+    })
+</script>
+
+</html>

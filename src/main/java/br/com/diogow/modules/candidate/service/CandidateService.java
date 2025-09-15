@@ -27,6 +27,7 @@ public class CandidateService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, String> data = new HashMap<>();
+        // Backend exige 'username' no /candidate/auth
         data.put("username", username);
         data.put("password", password);
 

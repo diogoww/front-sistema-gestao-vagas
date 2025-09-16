@@ -22,12 +22,33 @@
         <div class="bg-gray-200 rounded-lg p-8 w-3/4 max-w-xl shadow-lg">
             <h1 class="text-gray800 text-3xl mb-6 text-center">Cadastro de vagas</h1>
 
-            <form action="" class="space-y-4">
+            <form th:action="@{/company/jobs}" th:object="${jobs}" method="post" class="space-y-4">
                 <div>
                     <label for="" class="text-gray-700">Descrição da vaga</label>
                     <input type="text"
                            placeholder="Ex: Desenvolvedor Full Stack"
+                           name="description"
+                           th:field="*{description}"
                            class="w-full bg-gray-100 text-gray-800 text-lg rounded p-2 focus:outline-none focus:ring-purple-600 focus:ring-2">
+                </div>
+                <div>
+                    <label for="" class="text-gray-700">Nível da vaga</label>
+                    <input type="text"
+                           placeholder="Ex: Pleno"
+                           name="level"
+                           th:field="*{level}"
+                           class="w-full bg-gray-100 text-gray-800 text-lg rounded p-2 focus:outline-none focus:ring-purple-600 focus:ring-2">
+                </div>
+                <div>
+                    <label for="" class="text-gray-700">Benefícios da vaga</label>
+                    <input type="text"
+                           placeholder="Ex: Gympass"
+                           name="benefits"
+                           th:field="*{benefits}"
+                           class="w-full bg-gray-100 text-gray-800 text-lg rounded p-2 focus:outline-none focus:ring-purple-600 focus:ring-2">
+                </div>
+                <div>
+                    <button class="bg-purple-900 w-full py-3 rounded text-white text-lg hover:bg-purple-700">Cadastrar</button>
                 </div>
             </form>
         </div>

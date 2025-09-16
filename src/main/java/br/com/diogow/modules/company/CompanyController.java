@@ -1,13 +1,16 @@
 package br.com.diogow.modules.company;
 
 import br.com.diogow.modules.company.dto.CreateCompanyDTO;
+import br.com.diogow.modules.company.dto.CreateJobsDTO;
 import br.com.diogow.modules.company.service.CreateCompanyService;
+import br.com.diogow.modules.company.service.CreateJobService;
 import br.com.diogow.modules.company.service.LoginCompanyService;
 import br.com.diogow.utils.FormatErrorMessage;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +32,9 @@ public class CompanyController {
 
     @Autowired
     private LoginCompanyService loginCompanyService;
+
+    @Autowired
+    private CreateJobService createJobService;
 
     @GetMapping("/create")
     public String create(Model model){
@@ -81,7 +87,21 @@ public class CompanyController {
 
     @GetMapping("/jobs")
     @PreAuthorize("hasRole('COMPANY')")
-    public String jobs(){
+    public String jobs(Model model){
+        model.addAttribute("jobs", new CreateJobsDTO());
         return "company/jobs";
+    }
+
+    @PostMapping("/jobs")
+    @PreAuthorize("hasRole('COMPANY')")
+    public String createJobs(CreateJobsDTO jobs){
+        var result = this.createJobService.execute(jobs, getToken());
+        System.out.println(result);
+        return "redirect:/company/jobs";
+    }
+
+    private String getToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getDetails().toString();
     }
 }

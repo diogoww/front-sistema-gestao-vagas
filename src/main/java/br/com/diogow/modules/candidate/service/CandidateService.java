@@ -3,6 +3,7 @@ package br.com.diogow.modules.candidate.service;
 import br.com.diogow.modules.candidate.dto.Token;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,9 @@ import java.util.Map;
 @Service
 public class CandidateService {
 
+    @Value("${host.api.gestao.vagas}")
+    private String hostAPIGestaoVagas;
+
     public Token login(String username, String password){
         RestTemplate rt = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -27,15 +31,15 @@ public class CandidateService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, String> data = new HashMap<>();
-        // Backend exige 'username' no /candidate/auth
         data.put("username", username);
         data.put("password", password);
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(data, headers);
 
-        // Fetch raw response first
+        var url = hostAPIGestaoVagas.concat("/candidate/auth");
+
         ResponseEntity<String> response = rt.exchange(
-                "http://localhost:8080/candidate/auth",
+                url,
                 HttpMethod.POST,
                 request,
                 String.class
@@ -91,7 +95,7 @@ public class CandidateService {
         } catch (Exception e) {
             System.out.println("[CandidateService.login] Error parsing token: " + e.getMessage());
             // As last resort, try old direct mapping call (may yield nulls)
-            var result = rt.postForObject("http://localhost:8080/candidate/auth", request, Token.class);
+            var result = rt.postForObject(url, request, Token.class);
             System.out.println(result);
             return result;
         }

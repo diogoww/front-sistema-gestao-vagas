@@ -51,7 +51,6 @@ public class CompanyController {
         try{
             this.createCompanyService.execute(createCompanyDTO);
             model.addAttribute("company", new CreateCompanyDTO());
-
         } catch(HttpClientErrorException ex){
             model.addAttribute("error_message", FormatErrorMessage.formatErrorMessage(ex.getResponseBodyAsString()));
             model.addAttribute("company", createCompanyDTO);
@@ -101,7 +100,7 @@ public class CompanyController {
     public String createJobs(CreateJobsDTO jobs){
         var result = this.createJobService.execute(jobs, getToken());
         System.out.println(result);
-        return "redirect:/company/jobs";
+        return "redirect:/company/jobs/list";
     }
 
     @GetMapping("/jobs/list")

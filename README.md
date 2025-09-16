@@ -169,12 +169,6 @@ frontend-sistema-gestao-vagas/
 
 ---
 
-## 📄 Licença
-
-Defina aqui a licença do projeto (ex.: MIT, Apache-2.0). Caso não haja, mantenha como proprietário.
-
----
-
 ## 🙋 Suporte e Contato
 
 Em caso de dúvidas ou sugestões, abra uma issue ou entre em contato com o mantenedor do projeto.
